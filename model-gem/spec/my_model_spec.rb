@@ -1,12 +1,14 @@
-require 're_svc_client/requester'
+require 'model_gem'
+require 'my_model'
 
 module MyModelSpec
-  describe Requester do
+  describe MyModel do
     before(:each) do
-      @m = MyModel.new
+      MyModel.delete_all
     end
 
-    it "" do
+    it "Creates new model" do
+      m = User.create(name: "Joe")
     end
   end
 end
