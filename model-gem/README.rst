@@ -15,8 +15,34 @@ Tests
 
   rake spec
 
-Development
------------
+Build gem
+---------
+
+::
+
+  gem build model_gem.gemspec
+
+model-gem-<version>.gem will be created.
+
+To unpack to check:
+
+::
+
+  gem unpack model-gem-<version>.gem
+
+See `make-your-own-gem <http://guides.rubygems.org/make-your-own-gem/>`_.
+
+Build JAR
+---------
+
+FIXME
+
+::
+
+  bundle install --deployment --standalone
+
+Development tips
+----------------
 
 To try the code in ``irb`` during development:
 

@@ -1,4 +1,12 @@
+require 'model_gem/version'
+require 'model_gem/my_model'
+
 require 'activerecord-jdbcpostgresql-adapter'
 
-ActiveRecord::Base.configurations = YAML::load(IO.read('config/database.yml'))
-ActiveRecord::Base.establish_connection('development')
+module ModelGem
+  def self.connect(configs = {}, env = 'development')
+    configs = YAML::load(IO.read('config/database.yml')) if configs.empty?
+    ActiveRecord::Base.configurations = configs
+    ActiveRecord::Base.establish_connection(env)
+  end
+end

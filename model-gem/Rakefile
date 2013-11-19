@@ -1,4 +1,8 @@
+require 'bundler/gem_tasks'
+
+# ActiveRecord -----------------------------------------------------------------
 # http://exposinggotchas.blogspot.jp/2011/02/activerecord-migrations-without-rails.html
+
 require 'yaml'
 require 'logger'
 require 'active_record'

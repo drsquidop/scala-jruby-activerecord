@@ -1,8 +1,11 @@
 require 'model_gem'
-require 'my_model'
 
 module MyModelSpec
+  include ::ModelGem
+
   describe MyModel do
+    ModelGem.connect()
+
     before(:each) do
       MyModel.delete_all
     end
