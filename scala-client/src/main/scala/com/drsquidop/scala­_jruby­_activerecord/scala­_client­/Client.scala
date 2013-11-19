@@ -15,7 +15,8 @@ object Client {
     manager.getEngineByName("jruby")
   }
 
-  engine.eval("puts 'Hello World!'")
+  engine.eval("require 'model_gem'")
+  engine.eval("puts ModelGem")
 
   def create(myModel: MyModel): Try[MyModel] = ???
 
