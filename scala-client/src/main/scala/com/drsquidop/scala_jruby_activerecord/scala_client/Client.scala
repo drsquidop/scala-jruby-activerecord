@@ -1,6 +1,9 @@
 package com.drsquidop.scala_jruby_activerecord_scala_client
 
+import java.util.{List => JList, Map => JMap}
 import javax.script.{Invocable, ScriptEngine, ScriptEngineManager}
+
+import scala.collection.JavaConverters._
 import scala.util.Try
 
 object Client {
@@ -31,7 +34,21 @@ object Client {
     val h = engine.eval("{}")
     invocable.invokeMethod(h, "store", "name", myModel.name)
     val m = invocable.invokeMethod(RMyModel, "create", h)
-    toScalaMyModel(m)
+
+    val valid = invocable.invokeMethod(m, "valid?").asInstanceOf[Boolean]
+
+    if (valid) {
+      toScalaMyModel(m)
+    } else {
+      val errors   = invocable.invokeMethod(m, "errors")
+      val messages = invocable.invokeMethod(errors, "messages").asInstanceOf[JMap[Any, JList[String]]].asScala
+
+      // messages: map of Symbol -> JList
+      // Convert to map of String -> List
+      val messages2 = messages.map { case (k, v) => (k.toString, v.asScala) }
+
+      throw ValidationException(messages2.toMap)
+    }
   }
 
   def get(id: Long): Try[MyModel] = Try {
@@ -41,9 +58,12 @@ object Client {
 
   def all(): Try[Seq[MyModel]] = Try {
     val activeRecordRelation = invocable.invokeMethod(RMyModel, "all")
-    val rubyArray            = invocable.invokeMethod(activeRecordRelation, "to_a")
-    val javaArray            = invocable.invokeMethod(rubyArray, "to_java").asInstanceOf[Array[Any]]
-    javaArray.map(toScalaMyModel _)
+    val ms                   = invocable.invokeMethod(activeRecordRelation, "to_a").asInstanceOf[JList[Any]].asScala
+    //val rubyArray            = invocable.invokeMethod(activeRecordRelation, "to_a")
+    //val javaArray            = invocable.invokeMethod(rubyArray, "to_java").asInstanceOf[Array[Any]]
+    //javaArray.map(toScalaMyModel _)
+
+    ms.map(toScalaMyModel _)
   }
 
   private def toScalaMyModel(rubyMyModel: Any) = {

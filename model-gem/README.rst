@@ -2,20 +2,14 @@ Run ``rake -T`` to see all available tasks.
 
 Commands described below are put to publish_local.sh.
 
-DB migration
-------------
+Run tests
+---------
 
 Config config/database.yml, then run:
 
-* ``rake db:create`` to create DB
-* ``rake db:migrate`` to create tables in the DB
-
-Tests
------
-
-::
-
-  rake spec
+* ``DATABASE_ENV=test rake db:create`` to create DB
+* ``DATABASE_ENV=test rake db:migrate`` to create tables in the DB
+* ``rake spec`` to run tests
 
 Build gem
 ---------
