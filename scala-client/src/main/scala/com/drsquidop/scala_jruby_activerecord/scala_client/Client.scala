@@ -1,4 +1,4 @@
-package com.drsquidop.scala­_jruby­_activerecord.scala_client
+package com.drsquidop.scala_jruby_activerecord_scala_client
 
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
