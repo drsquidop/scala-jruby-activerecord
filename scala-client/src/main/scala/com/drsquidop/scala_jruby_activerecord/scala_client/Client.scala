@@ -43,10 +43,9 @@ object Client {
       val errors   = invocable.invokeMethod(m, "errors")
       val messages = invocable.invokeMethod(errors, "messages").asInstanceOf[JMap[Any, JList[String]]].asScala
 
-      // messages: map of Symbol -> JList
-      // Convert to map of String -> List
+      // messages is map of Symbol -> JList
+      // Convert it to map of String -> List
       val messages2 = messages.map { case (k, v) => (k.toString, v.asScala) }
-
       throw ValidationException(messages2.toMap)
     }
   }
@@ -59,10 +58,6 @@ object Client {
   def all(): Try[Seq[MyModel]] = Try {
     val activeRecordRelation = invocable.invokeMethod(RMyModel, "all")
     val ms                   = invocable.invokeMethod(activeRecordRelation, "to_a").asInstanceOf[JList[Any]].asScala
-    //val rubyArray            = invocable.invokeMethod(activeRecordRelation, "to_a")
-    //val javaArray            = invocable.invokeMethod(rubyArray, "to_java").asInstanceOf[Array[Any]]
-    //javaArray.map(toScalaMyModel _)
-
     ms.map(toScalaMyModel _)
   }
 
