@@ -1,5 +1,7 @@
 Run ``rake -T`` to see all available tasks.
 
+Commands described below are put to publish_local.sh.
+
 DB migration
 ------------
 
