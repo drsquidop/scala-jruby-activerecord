@@ -22,3 +22,8 @@ Reference:
 * https://github.com/jruby/jruby/wiki/JRubyAndJavaCodeExamples
 * https://kenai.com/projects/jruby/pages/WalkthroughsAndTutorials
 * http://java.ociweb.com/mark/programming/ActiveRecord.html
+
+Notes:
+
+* Only JSR 223 standard APIs are used. JRuby native APIs are not used.
+* Convenient libraries are not used. Ex: https://github.com/mcamou/scuby
