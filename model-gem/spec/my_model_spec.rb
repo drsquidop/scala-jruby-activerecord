@@ -4,7 +4,9 @@ module MyModelSpec
   include ::ModelGem
 
   describe MyModel do
-    ModelGem.connect()
+    yml = IO.read('config/database.yml')
+    env = 'test'
+    ModelGem.connect(yml, env)
 
     before(:each) do
       MyModel.delete_all
