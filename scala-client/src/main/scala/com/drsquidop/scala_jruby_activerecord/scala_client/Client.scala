@@ -18,9 +18,12 @@ import java.util.{List => JList, Map => JMap}
 import javax.script.{Invocable, ScriptEngine, ScriptEngineManager}
 
 import scala.collection.JavaConverters._
+import scala.io.Source
 import scala.util.Try
 
 object Client {
+  private val DEFAULT_CONFIG = "database.yml"
+
   // This is a demo about JSR 223, thus JRuby native APIs are not used.
   // We only use things in package javax.script:
   // http://docs.oracle.com/javase/6/docs/api/javax/script/package-summary.html
@@ -42,6 +45,13 @@ object Client {
 
   def connect(ymlConfigs: String, env: String) {
     invocable.invokeMethod(RModelGem, "connect", ymlConfigs, env)
+  }
+
+  /** Uses database.yml in classpath. */
+  def connect(env: String) {
+    val stream     = getClass.getClassLoader.getResourceAsStream(DEFAULT_CONFIG)
+    val ymlConfigs = Source.fromInputStream(stream).mkString
+    connect(ymlConfigs, env)
   }
 
   def create(myModel: MyModel): Try[MyModel] = Try {
