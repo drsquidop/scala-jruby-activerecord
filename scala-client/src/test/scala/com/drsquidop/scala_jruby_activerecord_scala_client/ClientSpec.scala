@@ -20,31 +20,21 @@ import scala.util.Failure
 import org.specs2.mutable._
 
 class ClientSpec extends Specification {
-  private val ymlConfigs = """
-development:
-  adapter: jdbcpostgresql
-  database: scala-jruby-activerecord-dev
-  host: localhost
-
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
-test:
-  adapter: jdbcpostgresql
-  database: scala-jruby-activerecord-test
-  host: localhost
-
-production:
-  adapter: jdbcpostgresql
-  database: scala-jruby-activerecord
-  host: localhost
-"""
-
-  Client.connect(ymlConfigs, "test")
+  Client.connect("test")
 
   "Client.new(any string) returns Success(MyModel)" in {
-    val r = createMyModel()
+    val name = UUID.randomUUID().toString
+    val r    = createMyModel(name)
     r must beSuccessfulTry
+
+    // Verify that the record was actually created
+
+    val m = r.get
+    m.name must_== name
+
+    val all    = Client.all().get
+    val exists = all.exists { m2 => m2.id == m.id && m2.name == name}
+    exists must beTrue
   }
 
   "Client.new(empty string) returns Failure(ValidationException) with ActiveRecord validation error map" in {
@@ -73,10 +63,11 @@ production:
 
   "Client.all returns Success(List[MyModel]) with several records" in {
     createMyModel()
+    createMyModel()
 
     val r = Client.all()
     r must beSuccessfulTry
-    r.get.nonEmpty must beTrue
+    (r.get.length > 1) must beTrue
   }
 
   private def createMyModel(name: String = UUID.randomUUID().toString) = {

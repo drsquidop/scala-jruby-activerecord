@@ -3,7 +3,9 @@ JSR 223 demo that uses a JRuby gem, which in turn uses ActiveRecord.
 Run tests
 ---------
 
-Create test DB (see model-gem), and run:
+Create test DB (see model-gem).
+
+Config DB in config/database.yml, and run:
 
 ::
 
