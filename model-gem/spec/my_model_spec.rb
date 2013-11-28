@@ -15,8 +15,16 @@ module MyModelSpec
 
     it 'MyGemModel.new with (any string) creates a record in the database' do
       name = SecureRandom.uuid
-      MyModel.create(name: name)
+      m    = MyModel.create(name: name)
+
+      # Verify that the record was actually created
+
+      m.name.should eq name
+
       MyModel.all.should_not be_empty
+
+      exists = MyModel.all.any? { |m2| m2.id == m.id && m2.name == name }
+      exists.should be_true
     end
 
     it 'MyGemModel.new with (blank string) returns rails standard validation error' do
